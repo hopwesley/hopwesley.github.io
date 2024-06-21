@@ -130,18 +130,33 @@
             align-items: center;
             padding-top: 6rem;
         }
+
         .update-photo{
             display: flex;
             align-items: center;
         }
 
-        .phaseInfo {
+
+        .phaseInfo,
+        .phaseInf-up {
             width: 504px;
             height: 696px;
             padding: 24px;
             background-color: rgb(53 50 69);
             border: 1px solid  #464258;
         }
+        .phaseInf-up {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .phaseInf-up img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
         .phaseInfo-user {
             width: 450px;
             margin: 0 auto;
@@ -162,7 +177,31 @@
             margin: 0 64px;
         }
 
+        .productPhoto {
+            background-color: #DFAD28;
+            width: 600px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #13111C;
+        }
+
+        .productPhoto:hover {
+            background-color: #bd911a;
+        }
+        .productPhoto img{
+            margin-right: 8px;
+        }
+        .teamInfo-content {
+            width: 1240px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(584px, 1fr));
+            grid-gap: 1.2rem 1.2rem;
+            gap: 1.2rem 1.2rem;
+        }
         .teamInfo {
+            width: 536px;
             padding: 24px;
             background-color: rgb(53 50 69);
             border: 1px solid  #464258;
@@ -177,8 +216,8 @@
             margin-right: 24px;
         }
         .teamInfo p{
-            font-size: 28px;
-            line-height: 28px;
+            font-size: 22px;
+            line-height: 44px;
         }
     </style>
 </head>
@@ -187,7 +226,7 @@
 <div class="navbar">
     <div style="display: flex; justify-content: space-between; align-items: center; width: 62%;margin: auto">
         <nav style="display: flex; justify-content: center; align-items: center">
-            <div class="logo"><a href="#">Logo</a></div>
+            <div class="logo"><img src="assets/file/logo.png"></div>
             <a href="#introduction">Introduction</a>
             <a href="#features">Features</a>
         </nav>
@@ -209,7 +248,7 @@
 <div class="phase-content" id="features">
     <div class="phaseInfo">
         <div class="phaseInfo-user">
-            <img src="" alt=" ">
+            <img src="assets/file/logo-Small.png" alt=" " style="width: auto;height: 32px">
             <p>Name</p>
         </div>
         <img src="/assets/file/phase1-img.png" alt=" ">
@@ -220,28 +259,28 @@
     </div>
 </div>
 
-
-<div class="content" id="Product">
-    <h1>See how much you have improved</h1>
-    <div class="update-photo">
-        <div class="phaseInfo" style="display: flex;justify-content: center;align-items: center">
-            <button>update</button>
+<div class="content" id="Product" style="padding-top: 2rem">
+    <h1 style="font-size: 42px; line-height: 66px;margin: 8px 0">See how much you have improved</h1>
+    <button class="productPhoto" id="updatePhotoButton"><img src="/assets/file/photo.png">Update Photo</button>
+    <input type="file" id="fileInput" accept="image/*" style="display:none;">
+    <div style="display: none;margin-top: 32px" id="photoContainer">
+        <div class="update-photo" >
+            <div class="phaseInf-up"></div>
+            <img src="/assets/file/arrow-symbol.png" alt="" class="phaseInfo-arrow">
+            <div class="phaseInfo"></div>
         </div>
-        <img src="/assets/file/arrow-symbol.png" alt="" class="phaseInfo-arrow">
-        <div class="phaseInfo">
-            <button></button>
-        </div>
+        <p style="color: #DFAD28;font-size: 36px;float: right">Be efficient as a Pro</p>
     </div>
-    <p style="color: #DFAD28;font-size: 36px;float: right">Be efficient as a Pro</p>
+
 </div>
 <div class="content" style="padding-top: 6rem">
     <h1>Team</h1>
-    <div style="display: flex;align-items: center">
+    <div class="teamInfo-content">
         <div class="teamInfo">
             <img src="/assets/file/SeanLONG-img.png">
             <p>Dr. Sean LONG <br>
                 Co-founder<br>
-                <span style="font-size: 16px; font-weight: 400">
+                <span style="font-size: 16px; font-weight: 400;line-height: 24px">
                     Bachelor in Clinic Medicine<br>
                 PhD in Finance<br>
                 Serial Entrepreneur<br>
@@ -350,6 +389,28 @@
 
     document.querySelector('.email-input-container button').addEventListener('click', function() {
         alert('Button clicked');
+    });
+
+    document.getElementById('updatePhotoButton').addEventListener('click', function() {
+        document.getElementById('fileInput').click();
+    });
+
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgElement = document.createElement('img');
+                imgElement.src = e.target.result;
+                const phaseInfoDiv = document.querySelector('.phaseInf-up');
+                phaseInfoDiv.innerHTML = '';
+                phaseInfoDiv.appendChild(imgElement);
+                document.getElementById('photoContainer').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            console.log('No file selected');
+        }
     });
 </script>
 </body>
