@@ -3,520 +3,354 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sports Official Website</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wdth,wght@75..125,100..800&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    <title>Radial Line Animation with Outward Emission</title>
+    <style>
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: #13111C; /* Changed background color */
+            color: #fff; /* Text color for content */
+            display: flex;
+            flex-direction: column;
+            font-family: 'Bangla MN', Merriweather,sans-serif; /* Apply the font */
+        }
+
+        button {
+            background-color: transparent;
+            border: none;
+            border-radius: 999px;
+            color: #DFAD28;
+            font-size: 16px;
+            font-weight: 600;
+            font-style: normal;
+            font-family: 'Bangla MN', Merriweather,sans-serif; /* Apply the font */
+            padding: 12px 32px 8px;
+        }
+
+        button:hover {
+            background-color: rgba(70, 66, 88, 0.35);
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* Ensure the canvas is behind other content */
+        }
+
+        .navbar {
+            width: 100%;
+            background: rgba(19, 17, 28, 0.5); /* Changed background color */
+            padding: 1rem 2.5rem;
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, 0); /* 校正到完全居中 */
+            z-index: 10;
+        }
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 1rem;
+        }
+        .content,
+        .phase-content {
+            z-index: 5;
+            padding: 14rem 2rem 2rem; /* Adjust padding to avoid overlap with navbar */
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .content h1 {
+            font-size: 62px;
+            line-height:62px ;
+            margin: 32px 0;
+        }
+        .content p {
+            font-size: 48px;
+            margin: 24px 0;
+            line-height: 48px;
+            max-width: 1200px;
+        }
+        .email-input-container {
+            display: flex;
+            align-items: center;
+            background-color: #464258;
+            border: 1px solid #979797;
+            border-radius: 999px;
+            max-width: 600px;
+            margin: auto;
+            padding: 0;
+            width: 100%;
+        }
+        .email-input {
+            flex-grow: 1;
+            padding: 13px 24px 11px;
+            font-size: 16px;
+            background: none;
+            color: #fff;
+            border: none;
+            outline: none;
+            text-align: left;
+        }
+        .email-input:empty::before {
+            content: attr(data-placeholder);
+            color: #aaa;
+        }
+        .email-input-container button {
+            padding: 22px 16px 16px;
+            font-size: 16px;
+            line-height: 16px;
+            border: none;
+            background-color: #DFAD28;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-top-right-radius: 999px;
+            border-bottom-right-radius: 999px;
+            outline: none;
+        }
+        .email-input-container button:hover {
+            background-color: #b28c21;
+        }
+        .email-input-container:focus-within {
+            border-color: #DFAD28;
+        }
+
+        .phase-content {
+            display: flex;
+            align-items: center;
+            padding-top: 6rem;
+        }
+        .update-photo{
+            display: flex;
+            align-items: center;
+        }
+
+        .phaseInfo {
+            width: 504px;
+            height: 696px;
+            padding: 24px;
+            background-color: rgb(53 50 69);
+            border: 1px solid  #464258;
+        }
+        .phaseInfo-user {
+            width: 450px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .phaseInfo-user p{
+            font-size: 14px;
+        }
+        .phaseInfo-user img {
+            width: 450px;
+            height: auto;
+        }
+
+        .phaseInfo-arrow{
+            margin: 0 64px;
+        }
+
+        .teamInfo {
+            padding: 24px;
+            background-color: rgb(53 50 69);
+            border: 1px solid  #464258;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            margin: 24px;
+        }
+        .teamInfo img{
+            width: 253px;
+            height: auto;
+            margin-right: 24px;
+        }
+        .teamInfo p{
+            font-size: 28px;
+            line-height: 28px;
+        }
+    </style>
 </head>
+<body>
+<canvas id="canvas"></canvas>
+<div class="navbar">
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 62%;margin: auto">
+        <nav style="display: flex; justify-content: center; align-items: center">
+            <div class="logo"><a href="#">Logo</a></div>
+            <a href="#introduction">Introduction</a>
+            <a href="#features">Features</a>
+        </nav>
+        <button >Reserve Aecess </button>
+    </div>
 
-<style>
+</div>
 
-    @media (max-width: 1200px) {
-        .hero-section {
-            height: 50vh; /* 在较小的设备上调整高度 */
+<div class="content" id="introduction">
+    <h1 style="color: #DFAD28">Sports Efficiency Lab</h1>
+    <p>Improves the  efficienty  of </p>
+    <p>Individual  and Team sports and Rehab</p>
+    <div class="email-input-container">
+        <div class="email-input" contenteditable="true" data-placeholder="your Email..."></div>
+        <button>Reserve Access</button>
+    </div>
+
+</div>
+<div class="phase-content" id="features">
+    <div class="phaseInfo">
+        <div class="phaseInfo-user">
+            <img src="" alt=" ">
+            <p>Name</p>
+        </div>
+        <img src="/assets/file/phase1-img.png" alt=" ">
+    </div>
+    <img src="/assets/file/arrow-symbol.png" alt="" class="phaseInfo-arrow">
+    <div class="phaseInfo">
+        <img src="/assets/file/phase3-result.png" alt=" " style="margin-top: 54px">
+    </div>
+</div>
+
+
+<div class="content" id="Product">
+    <h1>See how much you have improved</h1>
+    <div class="update-photo">
+        <div class="phaseInfo" style="display: flex;justify-content: center;align-items: center">
+            <button>update</button>
+        </div>
+        <img src="/assets/file/arrow-symbol.png" alt="" class="phaseInfo-arrow">
+        <div class="phaseInfo">
+            <button></button>
+        </div>
+    </div>
+    <p style="color: #DFAD28;font-size: 36px;float: right">Be efficient as a Pro</p>
+</div>
+<div class="content" style="padding-top: 6rem">
+    <h1>Team</h1>
+    <div style="display: flex;align-items: center">
+        <div class="teamInfo">
+            <img src="/assets/file/SeanLONG-img.png">
+            <p>Dr. Sean LONG <br>
+                Co-founder<br>
+                <span style="font-size: 16px; font-weight: 400">
+                    Bachelor in Clinic Medicine<br>
+                PhD in Finance<br>
+                Serial Entrepreneur<br>
+                Amteur Athlete<br>
+                Investment Banker
+                </span>
+            </p>
+        </div>
+        <div class="teamInfo">
+            <img src="/assets/file/WesleyLi-img.png">
+            <p>Dr. Sean LONG<br>
+                Co-founder<br>
+                <span style="font-size: 16px; font-weight: 400">
+                Bachelor in Clinic Medicine<br>
+                PhD in Finance<br>
+                Serial Entrepreneur<br>
+                Amteur Athlete<br>
+                Investment Banker
+                </span>
+            </p>
+        </div>
+    </div>
+</div>
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height, particles;
+    const colors = [
+        'hsla(252,5%,81%,0.8)', // Light blue
+        'hsla(225,37%,37%,0.8)', // Medium blue
+        'hsla(242,46%,14%,0.8)'  // Dark blue
+    ];
+
+    function init() {
+        resizeCanvas();
+        particles = [];
+        for (let i = 0; i < 500; i++) { // Increased number of particles
+            particles.push(new Particle());
+        }
+        animate();
+    }
+
+    function resizeCanvas() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+    }
+
+    class Particle {
+        constructor() {
+            this.reset();
+        }
+        reset() {
+            this.x = width / 2;
+            this.y = height / 2.7;
+            const angle = Math.random() * 2 * Math.PI;
+            this.vx = Math.cos(angle) * (Math.random() * 8 + 4);
+            this.vy = Math.sin(angle) * (Math.random() * 2 + 1);
+            this.speed = 0;
+            this.maxSpeed = Math.random() * 3 + 2;
+            this.acceleration = 0.05;
+            this.life = Math.random() * 100 + 50;
+            this.size = Math.random() * 2 + 1;
+            this.color = 'hsla(225, 37%, 37%, 0.8)'; // Fixed color
+        }
+        update() {
+            if (this.speed < this.maxSpeed) {
+                this.speed += this.acceleration;
+            }
+            this.x += this.vx * this.speed;
+            this.y += this.vy * this.speed;
+            this.life--;
+            if (this.life <= 0) {
+                this.reset();
+            }
+        }
+        draw() {
+            const grad = ctx.createLinearGradient(this.x, this.y, this.x - this.vx * this.speed * 50, this.y - this.vy * this.speed * 50); // Increased length
+            grad.addColorStop(0, this.color);
+            grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            ctx.strokeStyle = grad;
+            ctx.lineWidth = this.size;
+            ctx.beginPath();
+            ctx.moveTo(this.x, this.y);
+            ctx.lineTo(this.x - this.vx * this.speed * 50, this.y - this.vy * this.speed * 50); // Increased length
+            ctx.stroke();
         }
     }
-    * {
-        margin: 0;
-        padding: 0;
-        text-align: left;
-        box-sizing: border-box;
+
+    function animate() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach(particle => {
+            particle.update();
+            particle.draw();
+        });
+        requestAnimationFrame(animate);
     }
 
-    body {
-        font-family: Impact, DINCond-Medium, Arial, sans-serif;
-        overflow-x: hidden;
-        background-color: white;
-    }
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('load', init);
 
-    h2 {
-        font-size: 42px;
-        line-height: 42px;
-        margin-bottom: 12px;
-    }
+    document.querySelector('.email-input').addEventListener('input', function() {
+        console.log(this.innerText); // This will log the current text inside the div
+    });
 
-    p , span {
-        font-size: 20px;
-        line-height: 20px;
-        font-family: DINCond-Medium, Arial, sans-serif;
-    }
-
-    .containerText {
-        width: 70%;
-        height: 100%;
-        margin: auto;
-        position: relative;
-    }
-
-    /* Hero Section */
-    .hero-section {
-        width: 100vw;
-        height: 42.74vw;
-        background-image: url("/assets/file/promo.png");
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover; /* 覆盖整个区域，可能会裁切 */
-        position: relative;
-        color: white;
-    }
-
-    .hero-text {
-        position: absolute;
-        top: 50%;
-        left: 0;
-        transform: translate(0, -50%);
-        background: rgba(0, 0, 0, 0.5);
-        padding: 20px;
-    }
-
-    .hero-mail {
-        font-size: 32px;
-        line-height: 48px;
-        text-align: right;
-        position: absolute;
-        right: 20px;  /* 距离右侧20px */
-        bottom: 40px;  /* 距离底部20px */
-    }
-
-    .hero-text h1 {
-        font-size: 3em;
-        margin-bottom: 0.5em;
-    }
-
-    /* Product Introduction Section */
-
-    .product-introduction {
-        width: 100vw;
-        height: 45.87vw;
-        background-image: url("/assets/file/product-background.png");
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover; /* 覆盖整个区域，可能会裁切 */
-    }
-
-
-    .product-highlights {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(0, -50%);
-    }
-
-    .product-highlights p {
-        font-size: 20px;
-        color: #666;
-    }
-
-    .highlight-item {
-        display: flex;
-        align-items: center;
-        margin-top: 72px;
-    }
-
-    .highlight-number {
-       width: 90px;
-        height: 90px;
-        margin-right: 12px;
-    }
-
-    .highlight-text h3 {
-        margin-bottom: 8px;
-        font-size: 28px;
-        line-height: 28px;
-    }
-
-    .highlight-text p {
-        margin: 0;
-        font-size: 24px;
-        line-height: 24px;
-        color: #666;
-    }
-
-    .ProductPhase-intro {
-       width: 70%;
-        padding: 24px;
-        text-align: left;
-        margin: auto;
-    }
-
-    .ProductPhase-intro h2 {
-        margin-bottom: 10px;
-        margin-top: 72px;
-    }
-
-    .detailed-product-introduction p {
-        font-size: 1.2em;
-        margin-bottom: 20px;
-    }
-
-    .ProductPhase-photo {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 24px 0;
-    }
-
-    .ProductPhase-photo img {
-        width: 25%;
-        height: auto;
-    }
-
-    .plus-symbol, .arrow-symbol {
-       width: 48px;
-        height: 48px;
-        margin: 0 24px;
-    }
-
-    .example-text {
-        font-size: 18px;
-        color: rgba(20, 20, 21, 0.4);
-        margin-top: 16px;
-        font-weight: 400;
-    }
-
-    .product-section {
-        width: 100%;
-        height: auto;
-        background-image: url("/assets/file/product-bgimg.png");
-        background-repeat: no-repeat;
-        color: white;
-        padding: 72px 0;
-    }
-
-    .product-title {
-        margin: 72px 0;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(35%, 1fr));
-        grid-gap: 1.2rem 1.2rem;
-        gap: 3.2rem 1.2rem;
-        max-width: 76%;
-        min-width: 60%;
-
-    }
-
-    .product-title h2 {
-        font-size: 28px;
-        line-height: 28px;
-    }
-
-
-    .product-intro {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-    }
-
-    .product-intro img {
-        margin-right: 8px;
-    }
-
-    .market-section {
-        background-image: url("/assets/file/Market-backimg.png");
-        background-repeat: no-repeat;
-        background-position: center;
-        padding: 72px 24px;
-    }
-
-    .market-section h2{
-        margin-bottom: 42px;
-    }
-
-
-    ul.square-list {
-        list-style-type: none; /* 移除默认的列表标记 */
-        padding-left: 0; /* 移除列表的默认左填充 */
-    }
-
-    ul.square-list li {
-        position: relative; /* 为伪元素定位提供基准 */
-        padding-left: 20px; /* 留出空间放置自定义标记 */
-        margin: 24px 0 ;
-    }
-
-    ul.square-list li:before {
-        content: ""; /* 伪元素的内容 */
-        position: absolute; /* 绝对定位 */
-        left: 0; /* 在列表项的最左侧 */
-        top: 50%; /* 垂直居中 */
-        width: 10px; /* 标记的宽度 */
-        height: 10px; /* 标记的高度 */
-        background-color: #FCC42C; /* 标记的背景色 */
-        border-radius: 3px; /* 圆角效果 */
-        transform: translateY(-50%); /* 确保标记垂直居中 */
-    }
-
-
-    /* Team Introduction Section */
-    .team-introduction {
-        text-align: center;
-        display: flex;
-        justify-content: space-between;
-        align-items: stretch; /* 让所有子元素填充到父容器的高度 */
-        background-color: #F7F7F7;
-
-    }
-    .team-introLeft {
-        flex: 7; /* 占据大约 70% 的空间 */
-        background-color: #F7F7F7;
-        padding: 42px 0;
-    }
-
-    .team-introRight {
-        flex: 4; /* 占据大约 30% 的空间 */
-        background-color: #FEC52E;
-        display: flex;
-        align-items: center;
-        padding: 24px;
-
-    }
-
-    .team-list {
-        display: grid;
-        grid-template-columns:repeat(auto-fill, minmax(35%, 1fr));
-
-    }
-    .team-introLeft {
-        margin-left: 12%;
-    }
-
-    .team-member {
-       display: flex;
-        justify-content: flex-start;
-        align-items: center;
-    }
-
-    .team-member img {
-        width: 50%;
-        height: auto;
-        margin-right: 12px;
-    }
-
-    .team-member h3 {
-        margin-top: 15px;
-        font-size: 1.5em;
-    }
-
-    .team-introRight p {
-        margin-top: 10px;
-        max-width: 45%;
-        font-size: 28px;
-        line-height: 40px;
-    }
-
-    .phaseUpload {
-        width: 80px;
-        height: 80px;
-        border: none;
-        background-color: transparent;
-        background-image: url("/assets/file/upload.png");
-        background-position: center ;
-    }
-
-    .ProductPhase-photo div {
-        width: 100%;   /* 占满容器宽度 */
-        height: auto;  /* 高度自动调整 */
-        aspect-ratio: 11 / 14; /* 使用CSS的aspect-ratio属性维持比例 */
-        background-color: #F4F5F5 ;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-</style>
-<body>
-
-<!-- First Screen: Hero Section -->
-<section class="hero-section">
-    <div class="containerText">
-        <div class="hero-text">
-            <h1 style="color: #FEC52E">Sports Efficiency Lab</h1>
-            <h1>Large Motion Model and Application</h1>
-        </div>
-        <p class="hero-mail">Sean LONG <br>aetfopuca@gmail.com</p>
-    </div>
-</section>
-
-<!-- Product Introduction Section -->
-<section class="product-introduction">
-    <div class="containerText">
-        <div class="product-highlights">
-            <h2>Investment Highlights</h2>
-            <p>SE Lab is dedicated to improving the efficiency of individual and team sports and rehab</p>
-            <div class="highlight-item">
-                <div class="highlight-number">
-                    <img src="/assets/file/num01.png" alt=" ">
-                </div>
-                <div class="highlight-text">
-                    <h3>Large Motion Model</h3>
-                    <p>Leading Position in Industry</p>
-                </div>
-            </div>
-            <div class="highlight-item" style="margin-left: 88px">
-                <div class="highlight-number">
-                    <img src="/assets/file/num02.png" alt=" ">
-                </div>
-                <div class="highlight-text">
-                    <h3>Great Market Potential</h3>
-                    <p>Sports and Rehab</p>
-                </div>
-            </div>
-            <div class="highlight-item" style="margin-left: 176px">
-                <div class="highlight-number">
-                    <img src="/assets/file/num03.png" alt=" ">
-                </div>
-                <div class="highlight-text">
-                    <h3>Experienced Entrepreneurs</h3>
-                    <p>Athletes, Scientists, Bankers</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</section>
-<section class="ProductPhase">
-    <div class="ProductPhase-intro">
-        <h2>Product, phase 1, Self Efficiency</h2>
-        <p>Input two videos, SE Lab will automatically intercept the cycle of the action, identify the differences and mark them, and finally output a video with comparison</p>
-        <div class="ProductPhase-photo">
-            <img src="/assets/file/phase-img.png" alt="Phase 1 Image 1">
-            <img src="/assets/file/phase-add.png"  class="plus-symbol" alt=" " style="width: 48px; height: 48px">
-            <img src="/assets/file/phaseone-img.png" alt="Phase 1 Image 2">
-            <img src="/assets/file/arrow-symbol.png" class="arrow-symbol" alt=" " style="width: 48px; height: 48px">
-            <img src="/assets/file/phase1-result.png" alt="Phase 1 Result Image">
-        </div>
-
-        <h2>Product, phase 2, Optimized Solution</h2>
-        <p>Compare individual user actions with professional athlete actions to continuously optimize the efficiency of amateur sports. Through continuous learning, SE Lab will develop the most suitable motion template for users.</p>
-        <div class="ProductPhase-photo">
-            <img src="/assets/file/phaseone-img.png" alt="Phase 2 Image 1">
-            <img src="/assets/file/phase-add.png"  class="plus-symbol" style="width: 48px; height: 48px">
-            <img src="/assets/file/phase2-2.png" alt="Phase 2 Image 2">
-            <img src="/assets/file/arrow-symbol.png" class="arrow-symbol" style="width: 48px; height: 48px">
-            <img src="/assets/file/phase2-result.png" alt="Phase 2 Result Image">
-        </div>
-
-        <span class="example-text">For example, when I first use SE Lab, it will not provide me with Shohei Ohtani's template, but rather an optimized template for men who are 5'10" and 180 lbs.</span>
-    </div>
-</section>
-
-<section class="ProductPhase" style="background-color: rgba(244,245,245,0.5)">
-    <div class="ProductPhase-intro">
-        <h2>Try it out</h2>
-        <div class="ProductPhase-photo">
-            <div>
-                <button class="phaseUpload"></button>
-            </div>
-            <img src="/assets/file/phase-add.png"  class="plus-symbol" alt=" " style="width: 48px; height: 48px">
-            <div>
-                <button class="phaseUpload"></button>
-            </div>
-            <img src="/assets/file/arrow-symbol.png" class="arrow-symbol" alt=" " style="width: 48px; height: 48px">
-            <div>
-
-            </div>
-        </div>
-    </div>
-</section>
-<!-- product Introduction Section -->
-<section class="product-section">
-    <div class="containerText">
-        <h2>Product</h2>
-        <p>Based on the user's individual physical condition, SE Lab can monitor and correct the trajectory during or after exercise to improve sports & rehab efficiency and minimize injuries.</p>
-        <div class="product-title">
-            <div class="product-intro">
-                <img src="/assets/file/APPLICABILITY.png" alt=" ">
-                <div>
-                    <h2>APPLICABILITY</h2>
-                    <p>Process photos, videos</p>
-                </div>
-            </div>
-            <div class="product-intro">
-                <img src="/assets/file/CAPABILITY.png" alt=" ">
-                <div>
-                    <h2>CAPABILITY</h2>
-                    <p>Training and rehabilitation Amateur and professional athletes</p>
-                </div>
-            </div><div class="product-intro">
-                <img src="/assets/file/COMMITMENT.png" alt=" ">
-                <div>
-                    <h2>COMMITMENT</h2>
-                    <p>Learn and provide individuals the optimal ways of exercising</p>
-                </div>
-            </div><div class="product-intro">
-                <img src="/assets/file/PRODUCTIVITY.png" alt=" ">
-                <div>
-                    <h2>PRODUCTIVITY</h2>
-                    <p>Continuous improvement of sports efficiency by analyzing the differences in motions</p>
-                </div>
-            </div>
-        </div>
-        <span style="display: block; background-color: #DFAE29; font-size: 18px; padding: 8px; color: #141415;">SPORTS: Baseball, Golf, Basketball, Taekwando, Gym Training, etc  Rehabilitation: Stretch, Massage, Meditation, Yoga, etc</span>
-
-    </div>
-   </section>
-
-<!--mark Introduction Section -->
-<section class="market-section">
-    <div class="containerText">
-        <h2>Market Analysis</h2>
-        <ul class="square-list">
-            <li>
-                <p>The sports market size has grown strongly in recent years. It will grow from $480.12 billion in 2023 to $629.81 billion in 2028.</p>
-            </li>
-            <li>
-                <p>The proliferation of internet-accessible devices is considered a solid driver of the anticipated growth in the forecast period.</p>
-            </li>
-            <li>
-                <p>The algorithm, computing power, and data are the three basic elements of AI.</p>
-            </li>
-            <li>
-                <p>Unlike LLM, under Large Motion Model, personal motion data is not held by industry giants, such as Meta, X, so startups will have the opportunity to develop applications.</p>
-            </li>
-        </ul>
-    </div>
-</section>
-
-<!-- Team Introduction Section -->
-<section class="team-introduction">
-    <div class="team-introLeft">
-        <h2>Meet Our Team</h2>
-        <div style="margin-top: 32px">
-            <div class="team-list">
-                <div class="team-member">
-                    <img src="/assets/file/SeanLONG-img.png" alt="Team Member 1">
-                    <div>
-                        <h3>Dr. Sean LONG <br>
-                            Co-founder</h3>
-                        <p>Bachelor in Clinic Medicine <br>
-                            PhD in Finance <br>
-                            Serial Entrepreneur <br>
-                            Amteur Athlete <br>
-                            Investment Banker
-                        </p>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <img src="/assets/file/WesleyLi-img.png" alt="Team Member 1">
-                    <div>
-                        <h3>Dr. Sean LONG <br>
-                            Co-founder</h3>
-                        <p>Bachelor in Clinic Medicine <br>
-                            PhD in Finance <br>
-                            Serial Entrepreneur <br>
-                            Amteur Athlete <br>
-                            Investment Banker
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="team-introRight">
-        <p>SE Lab consultants include former China national basketball team coach, Yale
-            varsity tennis player, Canadian PGA coah, etc</p>
-    </div>
-
-</section>
-
-<script src="script.js"></script>
+    document.querySelector('.email-input-container button').addEventListener('click', function() {
+        alert('Button clicked');
+    });
+</script>
 </body>
 </html>
