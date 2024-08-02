@@ -8,28 +8,29 @@
     <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wdth,wght@75..125,100..800&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
     <title>Radial Line Animation with Outward Emission</title>
     <style>
-
+        * {
+            box-sizing: border-box;
+        }
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            background: #13111C; /* Changed background color */
-            color: #fff; /* Text color for content */
+            background: #F3F3F5;
+            color: #13111C;
             display: flex;
             flex-direction: column;
-            font-family: 'Bangla MN', Merriweather,sans-serif; /* Apply the font */
+            font-family: 'Bangla MN', Merriweather, sans-serif;
+            overflow-x: hidden;
         }
 
         button {
             background-color: transparent;
             border: none;
             border-radius: 999px;
-            color: #DFAD28;
+            color: #3057C5;
             font-size: 16px;
             font-weight: 600;
-            font-style: normal;
-            font-family: 'Bangla MN', Merriweather,sans-serif; /* Apply the font */
             padding: 12px 32px 8px;
         }
 
@@ -37,89 +38,104 @@
             background-color: rgba(70, 66, 88, 0.35);
         }
 
-        canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1; /* Ensure the canvas is behind other content */
-        }
-
         .navbar {
             width: 100%;
-            background: rgba(19, 17, 28, 0.5); /* Changed background color */
-            padding: 1rem 2.5rem;
+            background: rgba(243, 243, 245, 0.5);
+            padding: 0.8rem 0;
             position: fixed;
             top: 0;
             left: 50%;
-            transform: translate(-50%, 0); /* 校正到完全居中 */
+            transform: translate(-50%, 0);
             z-index: 10;
         }
+
+        .navbar a:hover {
+            color: #3057C5;
+        }
         .navbar a {
-            color: #fff;
+            color: #13111C;
             text-decoration: none;
             margin: 0 2.5rem;
+            transition: color 0.3s, text-decoration 0.3s;
         }
-        .navbar a:hover {
-            color: #DFAD28;
+        .navbar a:hover,
+        .navbar a:focus,
+        .navbar a:active {
+            color: #3057C5;
+            text-decoration: underline;
+            text-underline-offset: 4px; /* 下划线距文字 4px */
         }
+
+        .navbar a:focus,
+        .navbar a:active {
+            color: #67BCBD;
+        }
+
+        .navbar a.selected {
+            color: #67BCBD;
+            text-decoration: underline;
+            text-underline-offset: 4px; /* 下划线距文字 4px */
+        }
+
 
         .logo img {
             width: 42px;
             height: auto;
         }
 
-        .content,
-        .phase-content {
-            z-index: 5;
-            padding: 14rem 2rem 2rem; /* Adjust padding to avoid overlap with navbar */
-            max-width: 1200px;
-            margin: 0 auto;
-            text-align: center;
+        .content {
+            background-image: url("assets/file/home-img.png");
+            height: 783px;
+            width: 100%;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
         }
-        .content h1 {
+        .content,
+        .contentScenario,
+        .contentTeam,
+        .contentPro-info {
+            max-width: 1200px;
+            z-index: 5;
+            text-align: center;
+            margin: 0 auto;
+            box-sizing: border-box;
+            padding: 48px 0;
+        }
+
+        .h1 {
             font-size: 62px;
-            line-height:62px ;
+            line-height: 62px;
             margin: 32px 0;
         }
+        .contentPro-info h1{
+            font-size: 42px;
+            line-height: 66px;
+            margin-top: 58px;
+            text-align: left;
+            margin-bottom: 0;
+        }
         .content p {
-            font-size: 48px;
+            font-size: 24px;
             margin: 24px 0;
-            line-height: 48px;
-            max-width: 1200px;
-        }
-        .email-input-container {
-            display: flex;
-            align-items: center;
-            background-color: #464258;
-            border: 1px solid #979797;
-            border-radius: 999px;
-            max-width: 600px;
-            margin: auto;
-            padding: 0;
-            width: 100%;
-        }
-        .email-input {
-            flex-grow: 1;
-            padding: 13px 24px 11px;
-            font-size: 16px;
-            background: none;
-            color: #fff;
-            border: none;
-            outline: none;
+            line-height: 42px;
+            max-width: 70%;
             text-align: left;
         }
-        .email-input:empty::before {
-            content: attr(data-placeholder);
-            color: #aaa;
+
+        .contentPro-info p {
+            font-size: 16px;
+            line-height: 32px;
+            margin: 8px 0;
+            text-align: left;
+            max-width: 45%;
         }
+
         .email-input-container button {
             padding: 22px 16px 16px;
             font-size: 16px;
-            line-height: 16px;
             border: none;
-            background-color: #DFAD28;
+            background-color: #3057C5;
             color: #fff;
             cursor: pointer;
             transition: background-color 0.3s;
@@ -128,300 +144,395 @@
             outline: none;
         }
         .email-input-container button:hover {
-            background-color: #b28c21;
+            background-color: #3057C5;
         }
         .email-input-container:focus-within {
-            border-color: #DFAD28;
+            border-color: #3057C5;
         }
 
-        .phase-content {
-            display: flex;
-            align-items: center;
-            padding-top: 6rem;
+        .content-background {
+            background-image: url("assets/file/product-baackground-img.png");
+            height: 578px;
+            width: 100%;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
         }
-
-        .update-photo{
-            display: flex;
-            align-items: center;
-        }
-
-        .phaseInfo,
-        .phaseInf-up {
-            width: 504px;
-            height: 696px;
-            padding: 24px;
-            background-color: rgb(53 50 69);
-            border: 1px solid  #464258;
-        }
-        .phaseInf-up {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-        .phaseInf-up img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        .phaseInfo-user {
-            width: 450px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .phaseInfo-user p{
-            font-size: 14px;
-        }
-        .phaseInfo-user img {
-            width: 450px;
-            height: auto;
-        }
-
-        .phaseInfo-arrow{
-            margin: 0 64px;
-        }
-
-        .productPhoto {
-            background-color: #DFAD28;
-            width: 600px;
-            margin: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #13111C;
-        }
-
-        .productPhoto:hover {
-            background-color: #bd911a;
-        }
-        .productPhoto img{
+        .productPhoto img {
             margin-right: 8px;
         }
-        .teamInfo-content {
-            width: 1240px;
+
+        .footer {
+            margin-top: 96px;
+            background-color: #fff;
+            color: #13111C;
+            padding: 20px 0;
+            text-align: center;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: #DFAD28;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .rotated-container {
+            width: 50%;
+            margin: auto;
+            transform-origin: center;
+            transition: transform 0.5s;
+            transform: rotate(30deg);
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-right: 20px;
+        }
+
+        .contentScenario {
+            position: relative;
+            z-index: 5; /* Ensure it's above the canvas */
+        }
+
+        .contentScenarioInfo ul {
+            list-style-type: none;
+            counter-reset: item;
+            padding-left: 40px; /* 调整列表项的左边距以留出空间给序列号 */
+        }
+
+        .contentScenarioInfo ul li {
+            margin: 12px 0;
+            font-size: 16px;
+            text-align: left;
+            line-height: 28px;
+            counter-increment: item;
+        }
+
+        .contentScenarioInfo ul li::before {
+            content: counter(item) " . ";
+            font-weight: bold;
+            position: absolute;
+            left: 573px; /* 调整序列号的位置 */
+        }
+
+        .Scenarios01 li::before {
+            color: #3057C5;
+        }
+
+        .Scenarios02 li::before {
+            color: #67BCBD;
+        }
+
+        .Scenarios03 li::before {
+            color: #549BD6;
+        }
+
+        .contentTeam-info {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(584px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(386px, 1fr));
             grid-gap: 1.2rem 1.2rem;
             gap: 1.2rem 1.2rem;
         }
-        .teamInfo {
-            width: 536px;
-            padding: 24px;
-            background-color: rgb(53 50 69);
-            border: 1px solid  #464258;
-            display: flex;
-            align-items: center;
-            text-align: left;
-            margin: 24px;
-        }
-        .teamInfo img{
-            width: 253px;
+
+        .contentTeam-info div img {
+            width: 386px;
             height: auto;
-            margin-right: 24px;
         }
-        .teamInfo p{
-            font-size: 22px;
-            line-height: 44px;
+        .contentTeam span {
+            border: 1px solid #BCBCC9; /* 边框颜色可以根据需要调整 */
+            border-radius: 12px;
+            padding: 16px 12px 8px;
+            display: inline-flex; /* 确保内联元素的padding和边框生效 */
+            margin: 6px; /* 添加一些上下间距，以避免内容拥挤 */
+            font-size: 14px;
+            line-height: 14px;
+            align-items: center;
+        }
+        .contentTeam div h3 {
+            margin: 0; /* 添加一些上下间距，以避免内容拥挤 */
+            display: inline-block;
         }
 
     </style>
 </head>
 <body>
-<canvas id="canvas"></canvas>
 <div class="navbar">
-    <div style="display: flex; justify-content: space-between; align-items: center; width: 62%;margin: auto">
-        <nav style="display: flex; justify-content: center; align-items: center">
-            <div class="logo"><img src="assets/file/Elab_logo.png"></div>
-            <a href="#introduction">Introduction</a>
-            <a href="#features">Features</a>
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1200px; margin: auto;">
+        <img src="assets/file/elab3-8.png" alt="Logo">
+        <nav style="display: flex; justify-content: center; align-items: center;">
+            <a href="#product">Product</a>
+            <a href="#scenarios">Scenarios</a>
+            <a href="#team">Team</a>
         </nav>
-        <button >Reserve Aecess </button>
     </div>
-
 </div>
 
-<div class="content" id="introduction">
-    <h1 style="color: #DFAD28">Sports Efficiency Lab</h1>
-    <p>Improves the  efficienty  of </p>
-    <p>Individual  and Team sports and Rehab</p>
-    <div class="email-input-container">
-        <div class="email-input" contenteditable="true" data-placeholder="your Email..."></div>
-        <button>Reserve Access</button>
-    </div>
-
-</div>
-<div class="phase-content" id="features">
-    <div class="phaseInfo">
-        <div class="phaseInfo-user">
-            <img src="assets/file/Elab_logo.png" alt=" " style="width: 42px;height: auto">
-            <p>Name</p>
+<div class="content-container">
+    <div class="content" id="introduction" style="display: flex; flex-direction: column; justify-content: center;align-items: flex-start; max-width: 100%">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h1 style="font-size: 52px;text-align: left;margin-bottom: 0">Sports Efficiency Lab</h1>
+            <p>Utilizing AI to improve the efficiency of insured individuals' exercise and rehabilitation, reducing insurance company premiums and other payers' expenses.</p>
         </div>
-        <img src="/assets/file/phase1-img.png" alt=" ">
-    </div>
-    <img src="/assets/file/arrow-symbol.png" alt="" class="phaseInfo-arrow">
-    <div class="phaseInfo">
-        <img src="/assets/file/phase3-result.png" alt=" " style="margin-top: 54px">
-    </div>
-</div>
-
-<div class="content" id="Product" style="padding-top: 2rem">
-    <h1 style="font-size: 42px; line-height: 66px;margin: 8px 0">See how much you have improved</h1>
-    <button class="productPhoto" id="updatePhotoButton"><img src="/assets/file/photo.png">Update Photo</button>
-    <input type="file" id="fileInput" accept="image/*" style="display:none;">
-    <div style="display: none;margin-top: 32px" id="photoContainer">
-        <div class="update-photo" >
-            <div class="phaseInf-up"></div>
-            <img src="/assets/file/arrow-symbol.png" alt="" class="phaseInfo-arrow">
-            <div class="phaseInfo"></div>
+     </div>
+    <div class="contentPro" id="product">
+        <div class="content-background">
+            <div class="contentPro-info">
+                <h1>Product</h1>
+                <p style="font-size: 16px; line-height: 28px; margin: 8px 0; text-align: left;">
+                    over 700 sets of rehabilitation exercises<br>
+                    Physical therapists tailor rehabilitation plans or adopt system recommended solutions based on the user's situation<br>
+                    AI will correct actions in real-time based on the user's movement trajectory<br>
+                    Users can also choose their own rehabilitation plans as well<br>
+                </p>
+            </div>
         </div>
-        <p style="color: #DFAD28;font-size: 36px;float: right">Be efficient as a Pro</p>
+    </div>
+    <div class="contentScenario" id="scenarios">
+        <h1 style="font-size: 42px; line-height: 66px; margin: 8px 0; text-align: left;">Scenarios, beneficial to all parts</h1>
+        <div style="display: flex; align-items: center;justify-content: space-between">
+            <div class="rotated-container">
+                <canvas id="myChart"></canvas>
+            </div>
+            <div class="contentScenarioInfo">
+                <ul class="Scenarios01" style="display: block">
+                    <li>Currently only revenue per unit of time can be obtained.
+                        For example, even if there is a large number of patients waiting in
+                        line, only 8 hours of labor income can be obtained per day.
+                        Assuming that the entire amount is paid by the insurance company,
+                        that is, a maximum of $1,600.
+                    </li>
+                    <li>
+                        Through this service, a rehabilitation program is developed for the patient, and the patient can perform the rehabilitation at home on his/her own, with the insurance company’s expenses reduced from $200 to $50.
+                    </li>
+                    <li>Physical therapists receive income outside of the 8-hour
+                        period. Since it does not take away from their work time
+                        and space, they can earn multiple additional $50 per hour
+                        incomes by providing rehabilitation programs for multiple
+                        patients.
+                    </li>
+                </ul>
+
+                <ul class="Scenarios02" style="display: none">
+                    <li>The annual premium expenditure provided for the rehab activities of its insured exceeds billions of dollars.
+                        For example, insurance companies have to pay rehab fees of up to $200 per hour to physical therapists.
+                        If purchasing this service, it will only cost
+                        $50 per hour.
+                    </li>
+                    <li>
+                        The corporate clients procure rehab
+                        services annually for the welfare of its employees.
+                        For example, Google and law firms
+                        offer massage services, and our
+                        product will significantly reduce such expenses.
+                    </li>
+                </ul>
+                <ul class="Scenarios03" style="display: none">
+                    <li>
+                        Currently it is only possible to go through a long wait while getting rehab from a physical therapist.
+                    </li>
+                    <li>
+                        With this program, waiting times and visits can be significantly reduced and treatment time is more autonomous.
+                    </li>
+                </ul>
+            </div>
+
+            <div class="buttons">
+                <button id="upButton">上</button>
+                <button id="downButton">下</button>
+            </div>
+
+        </div>
     </div>
 
-</div>
-<div class="content" style="padding-top: 6rem">
-    <h1>Team</h1>
-    <div class="teamInfo-content">
-        <div class="teamInfo">
-            <img src="/assets/file/SeanLONG-img.png">
-            <p>Dr. Sean LONG <br>
-                Co-founder<br>
-                <span style="font-size: 16px; font-weight: 400;line-height: 24px">
-                    Bachelor in Clinic Medicine<br>
-                PhD in Finance<br>
-                Serial Entrepreneur<br>
-                Amteur Athlete<br>
-                Investment Banker
+    <div class="contentTeam" id="team">
+        <h1 style="font-size: 42px; line-height: 66px; margin: 8px 0; text-align: left;">Team</h1>
+        <div class="contentTeam-info">
+            <div>
+                <img src="assets/file/SeanLONG-img.png">
+                <div>
+                    <span style="background-color: rgba(188,188,201,0.3); font-size: 14px;font-weight: 600;color: #67BCBD;border: none">Co-founder</span>
+                    <h3>Dr. Sean LONG</h3>
+                </div>
+                <span>
+                    Bachelor in Clinic Medicine
                 </span>
-            </p>
-        </div>
-        <div class="teamInfo">
-            <img src="/assets/file/WesleyLi-img.png">
-            <p>Wesley Li<br>
-                Co-founder<br>
-                <span style="font-size: 16px; font-weight: 400">
-                Co-founder<br>
-                Bachelor in CS<br>
-                Author<br>
-                Multiple Patents Holder<br>
-                Serial Entrepreneur<br>
-                Amteur Athlete
+                <span>
+                    PhD in Finance
                 </span>
-            </p>
+                <span>
+                    Serial Entrepreneur
+                </span>
+                <span>
+                    Amteur Athlete
+                </span>
+                <span>
+                    Investment Banker
+                </span>
+            </div>
+            <div>
+                <img src="assets/file/Elab-img.png">
+
+                <span>
+                   Former China national basketball team coach
+                </span>
+                <span>
+                    Former Yale varsity tennis player
+                </span>
+                <span>
+                   Canadian registered therapist
+                </span>
+                <span>
+                    Canadian insurance executive
+                </span>
+            </div>
+            <div>
+                <img src="assets/file/WesleyLi-img.png">
+                <div>
+                    <span style="background-color: rgba(188,188,201,0.3); font-size: 14px;font-weight: 600;color: #67BCBD;border: none">Co-founder</span>
+                    <h3>Wesley Li</h3>
+                </div>
+
+                <span>
+                    Author
+                </span>
+                <span>
+                    Multiple Patents Holder
+                </span>
+                <span>
+                    BA in computer science
+                </span>
+                <span>
+                    Serial Entrepreneur
+                </span>
+                <span>
+                    Amateur athlete
+                </span>
+            </div>
         </div>
     </div>
 </div>
+
+<div class="footer">
+    <p>&copy; 2024 Your Company. All rights reserved. <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    let width, height, particles;
-    const colors = [
-        'hsla(252,5%,81%,0.8)', // Light blue
-        'hsla(225,37%,37%,0.8)', // Medium blue
-        'hsla(242,46%,14%,0.8)'  // Dark blue
-    ];
+    document.addEventListener('DOMContentLoaded', function () {
+        const navLinks = document.querySelectorAll('.navbar a');
 
-    function init() {
-        resizeCanvas();
-        particles = [];
-        for (let i = 0; i < 500; i++) { // Increased number of particles
-            particles.push(new Particle());
-        }
-        animate();
-    }
+        navLinks.forEach(link => {
+            link.addEventListener('click', function () {
+                // 移除所有链接的选中状态
+                navLinks.forEach(nav => nav.classList.remove('selected'));
 
-    function resizeCanvas() {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
-    }
-
-    class Particle {
-        constructor() {
-            this.reset();
-        }
-        reset() {
-            this.x = width / 2;
-            this.y = height / 2.7;
-            const angle = Math.random() * 2 * Math.PI;
-            this.vx = Math.cos(angle) * (Math.random() * 8 + 4);
-            this.vy = Math.sin(angle) * (Math.random() * 2 + 1);
-            this.speed = 0;
-            this.maxSpeed = Math.random() * 3 + 2;
-            this.acceleration = 0.05;
-            this.life = Math.random() * 100 + 50;
-            this.size = Math.random() * 2 + 1;
-            this.color = 'hsla(225, 37%, 37%, 0.8)'; // Fixed color
-        }
-        update() {
-            if (this.speed < this.maxSpeed) {
-                this.speed += this.acceleration;
-            }
-            this.x += this.vx * this.speed;
-            this.y += this.vy * this.speed;
-            this.life--;
-            if (this.life <= 0) {
-                this.reset();
-            }
-        }
-        draw() {
-            const grad = ctx.createLinearGradient(this.x, this.y, this.x - this.vx * this.speed * 50, this.y - this.vy * this.speed * 50); // Increased length
-            grad.addColorStop(0, this.color);
-            grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-            ctx.strokeStyle = grad;
-            ctx.lineWidth = this.size;
-            ctx.beginPath();
-            ctx.moveTo(this.x, this.y);
-            ctx.lineTo(this.x - this.vx * this.speed * 50, this.y - this.vy * this.speed * 50); // Increased length
-            ctx.stroke();
-        }
-    }
-
-    function animate() {
-        ctx.clearRect(0, 0, width, height);
-        particles.forEach(particle => {
-            particle.update();
-            particle.draw();
+                // 为被点击的链接添加选中状态
+                this.classList.add('selected');
+            });
         });
-        requestAnimationFrame(animate);
-    }
-
-    window.addEventListener('resize', resizeCanvas);
-    window.addEventListener('load', init);
-
-    document.querySelector('.email-input').addEventListener('input', function() {
-        console.log(this.innerText); // This will log the current text inside the div
     });
 
-    document.querySelector('.email-input-container button').addEventListener('click', function() {
-        alert('Button clicked');
-    });
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var rotationAngle = 30;
+    var currentSegment = 0;
 
-    document.getElementById('updatePhotoButton').addEventListener('click', function() {
-        document.getElementById('fileInput').click();
-    });
+    var originalColors = {
+        inner: ['#3057C5', '#BABDBD', '#BABDBD'],
+        outer: ['rgba(48,87,197,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)']
+    };
 
-    document.getElementById('fileInput').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const imgElement = document.createElement('img');
-                imgElement.src = e.target.result;
-                const phaseInfoDiv = document.querySelector('.phaseInf-up');
-                phaseInfoDiv.innerHTML = '';
-                phaseInfoDiv.appendChild(imgElement);
-                document.getElementById('photoContainer').style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        } else {
-            console.log('No file selected');
+    var colors = {
+        inner: [...originalColors.inner],
+        outer: ['rgba(48,87,197,0.2)', 'rgba(48,87,197,0.2)', 'rgba(48,87,197,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)','rgba(186,189,189,0.2)','rgba(186,189,189,0.2)']
+    };
+
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+
+            datasets: [{
+                label: '外层环形图',
+                data: [1/9, 1/9, 1/9, 1/6, 1/6, 1/6, 1/6, 0, 0, 0],
+                backgroundColor: colors.outer,
+                borderWidth: 1,
+                hoverOffset: 4
+            },
+                {
+                    label: '内层饼状图',
+                    data: [1/3, 1/3, 1/3],
+                    backgroundColor: colors.inner,
+                    borderWidth: 1,
+                    hoverOffset: 4
+                }]
+        },
+        options: {
+            responsive: true,
+            layout: {
+                padding: {
+                    top: 10,
+                    bottom: 10,
+                    left: 10,
+                    right: 10
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.label + ': ' + (tooltipItem.raw * 100).toFixed(1) + '%';
+                        }
+                    }
+                }
+            }
         }
     });
+
+    document.getElementById('downButton').addEventListener('click', function() {
+        rotationAngle += 120;
+        currentSegment = (currentSegment + 1) % 3;
+        updateChart();
+    });
+
+    function updateChart() {
+        document.querySelector('.rotated-container').style.transform = `rotate(${rotationAngle}deg)`;
+
+        if (currentSegment === 1) {
+            colors.inner = ['#BABDBD', '#BABDBD', '#549BD6'];
+            colors.outer = ['rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)','rgba(186,189,189,0.2)','rgba(84,155,214,0.2)', 'rgba(84,155,214,0.2)'];
+            showScenario('Scenarios03');
+        } else if (currentSegment === 2) {
+            colors.inner = ['#BABDBD', '#67BCBD', '#BABDBD'];
+            colors.outer = ['rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(103,188,189,0.2)',  'rgba(103,188,189,0.2)','rgba(186,189,189,0.2)','rgba(186,189,189,0.2)'];
+            showScenario('Scenarios02');
+        } else {
+            colors.inner = [...originalColors.inner];
+            colors.outer = ['rgba(48,87,197,0.2)', 'rgba(48,87,197,0.2)', 'rgba(48,87,197,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)'];
+            showScenario('Scenarios01');
+        }
+
+        myChart.data.datasets[0].backgroundColor = colors.outer;
+        myChart.data.datasets[1].backgroundColor = colors.inner;
+        myChart.update();
+    }
+
+    function showScenario(scenarioClass) {
+        document.querySelectorAll('.contentScenarioInfo ul').forEach(function(ul) {
+            ul.style.display = 'none';
+        });
+        document.querySelector('.' + scenarioClass).style.display = 'block';
+    }
 </script>
 </body>
 </html>
