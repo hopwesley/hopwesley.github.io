@@ -266,6 +266,22 @@
             display: inline-block;
         }
 
+        button#upButton {
+            color: #C0C0C0; /* 默认灰色 */
+        }
+
+        button#upButton:disabled {
+            color: #C0C0C0; /* 灰色 */
+        }
+
+        button#downButton {
+            color: #3057C5;
+        }
+
+        button#upButton:enabled {
+            color: #67BCBD; /* 可点击时 */
+        }
+
     </style>
 </head>
 <body>
@@ -350,8 +366,8 @@
             </div>
 
             <div class="buttons">
-                <button id="upButton">上</button>
-                <button id="downButton">下</button>
+                <button id="upButton">&#9650;</button>
+                <button id="downButton">&#9660;</button>
             </div>
 
         </div>
@@ -431,108 +447,119 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const navLinks = document.querySelectorAll('.navbar a');
+        const upButton = document.getElementById('upButton');
+        const downButton = document.getElementById('downButton');
+        const rotatedContainer = document.querySelector('.rotated-container');
+        let rotationAngle = 30;
+        let currentSegment = 0;
 
-        navLinks.forEach(link => {
-            link.addEventListener('click', function () {
-                // 移除所有链接的选中状态
-                navLinks.forEach(nav => nav.classList.remove('selected'));
+        const originalColors = {
+            inner: ['#3057C5', '#BABDBD', '#BABDBD'],
+            outer: ['rgba(48,87,197,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)']
+        };
 
-                // 为被点击的链接添加选中状态
-                this.classList.add('selected');
-            });
-        });
-    });
+        const colors = {
+            inner: [...originalColors.inner],
+            outer: ['rgba(48,87,197,0.2)', 'rgba(48,87,197,0.2)', 'rgba(48,87,197,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)']
+        };
 
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var rotationAngle = 30;
-    var currentSegment = 0;
-
-    var originalColors = {
-        inner: ['#3057C5', '#BABDBD', '#BABDBD'],
-        outer: ['rgba(48,87,197,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)']
-    };
-
-    var colors = {
-        inner: [...originalColors.inner],
-        outer: ['rgba(48,87,197,0.2)', 'rgba(48,87,197,0.2)', 'rgba(48,87,197,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)','rgba(186,189,189,0.2)','rgba(186,189,189,0.2)']
-    };
-
-    var myChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-
-            datasets: [{
-                label: '外层环形图',
-                data: [1/9, 1/9, 1/9, 1/6, 1/6, 1/6, 1/6, 0, 0, 0],
-                backgroundColor: colors.outer,
-                borderWidth: 1,
-                hoverOffset: 4
-            },
-                {
-                    label: '内层饼状图',
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                datasets: [{
+                    label: 'Outer Ring',
+                    data: [1/9, 1/9, 1/9, 1/6, 1/6, 1/6, 1/6, 0, 0, 0],
+                    backgroundColor: colors.outer,
+                    borderWidth: 1,
+                    hoverOffset: 4
+                }, {
+                    label: 'Inner Ring',
                     data: [1/3, 1/3, 1/3],
                     backgroundColor: colors.inner,
                     borderWidth: 1,
                     hoverOffset: 4
                 }]
-        },
-        options: {
-            responsive: true,
-            layout: {
-                padding: {
-                    top: 10,
-                    bottom: 10,
-                    left: 10,
-                    right: 10
-                }
             },
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(tooltipItem) {
-                            return tooltipItem.label + ': ' + (tooltipItem.raw * 100).toFixed(1) + '%';
+            options: {
+                responsive: true,
+                layout: {
+                    padding: {
+                        top: 10,
+                        bottom: 10,
+                        left: 10,
+                        right: 10
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                return tooltipItem.label + ': ' + (tooltipItem.raw * 100).toFixed(1) + '%';
+                            }
                         }
                     }
                 }
             }
-        }
-    });
-
-    document.getElementById('downButton').addEventListener('click', function() {
-        rotationAngle += 120;
-        currentSegment = (currentSegment + 1) % 3;
-        updateChart();
-    });
-
-    function updateChart() {
-        document.querySelector('.rotated-container').style.transform = `rotate(${rotationAngle}deg)`;
-
-        if (currentSegment === 1) {
-            colors.inner = ['#BABDBD', '#BABDBD', '#549BD6'];
-            colors.outer = ['rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)','rgba(186,189,189,0.2)','rgba(84,155,214,0.2)', 'rgba(84,155,214,0.2)'];
-            showScenario('Scenarios03');
-        } else if (currentSegment === 2) {
-            colors.inner = ['#BABDBD', '#67BCBD', '#BABDBD'];
-            colors.outer = ['rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(103,188,189,0.2)',  'rgba(103,188,189,0.2)','rgba(186,189,189,0.2)','rgba(186,189,189,0.2)'];
-            showScenario('Scenarios02');
-        } else {
-            colors.inner = [...originalColors.inner];
-            colors.outer = ['rgba(48,87,197,0.2)', 'rgba(48,87,197,0.2)', 'rgba(48,87,197,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)'];
-            showScenario('Scenarios01');
-        }
-
-        myChart.data.datasets[0].backgroundColor = colors.outer;
-        myChart.data.datasets[1].backgroundColor = colors.inner;
-        myChart.update();
-    }
-
-    function showScenario(scenarioClass) {
-        document.querySelectorAll('.contentScenarioInfo ul').forEach(function(ul) {
-            ul.style.display = 'none';
         });
-        document.querySelector('.' + scenarioClass).style.display = 'block';
-    }
+
+        downButton.addEventListener('click', function () {
+            rotationAngle += 120;
+            currentSegment = (currentSegment + 1) % 3;
+            updateChart();
+            checkButtons();
+        });
+
+        upButton.addEventListener('click', function () {
+            if (rotationAngle === 0) return;
+            rotationAngle = 30;
+            currentSegment = 0;
+            updateChart();
+            checkButtons();
+        });
+
+        function updateChart() {
+            rotatedContainer.style.transform = `rotate(${rotationAngle}deg)`;
+
+            if (currentSegment === 1) {
+                colors.inner = ['#BABDBD', '#BABDBD', '#549BD6'];
+                colors.outer = ['rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(84,155,214,0.2)', 'rgba(84,155,214,0.2)'];
+                showScenario('Scenarios02');
+            } else if (currentSegment === 2) {
+                colors.inner = ['#BABDBD', '#67BCBD', '#BABDBD'];
+                colors.outer = ['rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(103,188,189,0.2)', 'rgba(103,188,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)'];
+                showScenario('Scenarios03');
+            } else {
+                colors.inner = [...originalColors.inner];
+                colors.outer = ['rgba(48,87,197,0.2)', 'rgba(48,87,197,0.2)', 'rgba(48,87,197,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)', 'rgba(186,189,189,0.2)'];
+                showScenario('Scenarios01');
+            }
+
+            myChart.data.datasets[0].backgroundColor = colors.outer;
+            myChart.data.datasets[1].backgroundColor = colors.inner;
+            myChart.update();
+        }
+
+        function showScenario(scenarioClass) {
+            document.querySelectorAll('.contentScenarioInfo ul').forEach(function (ul) {
+                ul.style.display = 'none';
+            });
+            document.querySelector('.' + scenarioClass).style.display = 'block';
+        }
+
+        function checkButtons() {
+            upButton.disabled = rotationAngle === 30;
+            if (upButton.disabled) {
+                upButton.style.color = "#C0C0C0"; // 灰色
+            } else {
+                upButton.style.color = "#67BCBD"; // 可点击时颜色
+            }
+        }
+
+        // 初始检查按钮状态
+        checkButtons();
+    });
+
 </script>
 </body>
 </html>
