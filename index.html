@@ -214,7 +214,7 @@
         }
 
         .contentScenarioInfo ul li {
-            margin: 12px 0;
+            margin: 32px 0;
             font-size: 16px;
             text-align: left;
             line-height: 28px;
@@ -493,13 +493,10 @@
                 },
                 plugins: {
                     tooltip: {
-                        callbacks: {
-                            label: function (tooltipItem) {
-                                return tooltipItem.label + ': ' + (tooltipItem.raw * 100).toFixed(1) + '%';
-                            }
-                        }
+                        enabled: false // 禁用工具提示
                     }
-                }
+                },
+                events: [] // 禁用所有交互事件
             }
         });
 
