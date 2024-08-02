@@ -557,6 +557,21 @@
         checkButtons();
     });
 
+    document.addEventListener('DOMContentLoaded', function () {
+        const navLinks = document.querySelectorAll('.navbar a');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function () {
+                // 移除所有链接的选中状态
+                navLinks.forEach(nav => nav.classList.remove('selected'));
+
+                // 为被点击的链接添加选中状态
+                this.classList.add('selected');
+            });
+        });
+    });
+
+
 </script>
 </body>
 </html>
