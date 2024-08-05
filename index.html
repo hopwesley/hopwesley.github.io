@@ -134,7 +134,7 @@
 
         .email-input-container button {
             padding: 22px 16px 16px;
-            font-size: 16px;
+            font-size: 22px;
             border: none;
             background-color: #3057C5;
             color: #fff;
@@ -207,6 +207,11 @@
             position: relative;
             z-index: 5; /* Ensure it's above the canvas */
         }
+        .contentScenarioInfo p{
+            font-size: 20px;
+            font-weight: 500;
+            color: #ffffff;
+        }
 
         .contentScenarioInfo ul {
             list-style-type: none;
@@ -234,11 +239,11 @@
         }
 
         .Scenarios02 li::before {
-            color: #67BCBD;
+            color: #549BD6;
         }
 
         .Scenarios03 li::before {
-            color: #549BD6;
+            color: #67BCBD;
         }
 
         .contentTeam-info {
@@ -309,7 +314,7 @@
             <div class="contentPro-info">
                 <h1>Product</h1>
                 <p style="font-size: 16px; line-height: 28px; margin: 8px 0; text-align: left;">
-                    over 700 sets of rehabilitation exercises<br>
+                    Over 700 sets of rehabilitation exercises<br>
                     Physical therapists tailor rehabilitation plans or adopt system recommended solutions based on the user's situation<br>
                     AI will correct actions in real-time based on the user's movement trajectory<br>
                     Users can also choose their own rehabilitation plans as well<br>
@@ -319,51 +324,60 @@
     </div>
     <div class="contentScenario" id="scenarios">
         <h1 style="font-size: 42px; line-height: 66px; margin: 8px 0; text-align: left;">Scenarios, beneficial to all parts</h1>
-        <div style="display: flex; align-items: center;justify-content: space-between">
+        <div style="display: flex; align-items: center;justify-content: space-between;position: relative">
             <div class="rotated-container">
                 <canvas id="myChart"></canvas>
             </div>
             <div class="contentScenarioInfo">
-                <ul class="Scenarios01" style="display: block">
-                    <li>Currently only revenue per unit of time can be obtained.
-                        For example, even if there is a large number of patients waiting in
-                        line, only 8 hours of labor income can be obtained per day.
-                        Assuming that the entire amount is paid by the insurance company,
-                        that is, a maximum of $1,600.
-                    </li>
-                    <li>
-                        Through this service, a rehabilitation program is developed for the patient, and the patient can perform the rehabilitation at home on his/her own, with the insurance company’s expenses reduced from $200 to $50.
-                    </li>
-                    <li>Physical therapists receive income outside of the 8-hour
-                        period. Since it does not take away from their work time
-                        and space, they can earn multiple additional $50 per hour
-                        incomes by providing rehabilitation programs for multiple
-                        patients.
-                    </li>
-                </ul>
+                <div class="Scenarios01" style="display: block;">
+                    <p style="position:absolute; top: 251px;left: 287px" class="Scenarios01title">Therapists</p>
+                    <ul  >
+                        <li>Currently only revenue per unit of time can be obtained.
+                            For example, even if there is a large number of patients waiting in
+                            line, only 8 hours of labor income can be obtained per day.
+                            Assuming that the entire amount is paid by the insurance company,
+                            that is, a maximum of $1,600.
+                        </li>
+                        <li>
+                            Through this service, a rehabilitation program is developed for the patient, and the patient can perform the rehabilitation at home on his/her own, with the insurance company’s expenses reduced from $200 to $50.
+                        </li>
+                        <li>Physical therapists receive income outside of the 8-hour
+                            period. Since it does not take away from their work time
+                            and space, they can earn multiple additional $50 per hour
+                            incomes by providing rehabilitation programs for multiple
+                            patients.
+                        </li>
+                    </ul>
+                </div>
+                <div class="Scenarios02" style="display: none">
+                    <p style="position:absolute; top: 245px;left: 295px" class="Scenarios02title">Insurance</p>
+                    <ul >
+                        <li>The annual premium expenditure provided for the rehab activities of its insured exceeds billions of dollars.
+                            For example, insurance companies have to pay rehab fees of up to $200 per hour to physical therapists.
+                            If purchasing this service, it will only cost
+                            $50 per hour.
+                        </li>
+                        <li>
+                            The corporate clients procure rehab
+                            services annually for the welfare of its employees.
+                            For example, Google and law firms
+                            offer massage services, and our
+                            product will significantly reduce such expenses.
+                        </li>
+                    </ul>
+                </div>
+                <div class="Scenarios03" style="display: none">
+                    <p style="position:absolute; top: 249px;left: 313px" class="Scenarios02title">Patients</p>
+                    <ul>
+                        <li>
+                            Currently it is only possible to go through a long wait while getting rehab from a physical therapist.
+                        </li>
+                        <li>
+                            With this program, waiting times and visits can be significantly reduced and treatment time is more autonomous.
+                        </li>
+                    </ul>
+                </div>
 
-                <ul class="Scenarios02" style="display: none">
-                    <li>The annual premium expenditure provided for the rehab activities of its insured exceeds billions of dollars.
-                        For example, insurance companies have to pay rehab fees of up to $200 per hour to physical therapists.
-                        If purchasing this service, it will only cost
-                        $50 per hour.
-                    </li>
-                    <li>
-                        The corporate clients procure rehab
-                        services annually for the welfare of its employees.
-                        For example, Google and law firms
-                        offer massage services, and our
-                        product will significantly reduce such expenses.
-                    </li>
-                </ul>
-                <ul class="Scenarios03" style="display: none">
-                    <li>
-                        Currently it is only possible to go through a long wait while getting rehab from a physical therapist.
-                    </li>
-                    <li>
-                        With this program, waiting times and visits can be significantly reduced and treatment time is more autonomous.
-                    </li>
-                </ul>
             </div>
 
             <div class="buttons">
@@ -443,7 +457,7 @@
 </div>
 
 <div class="footer">
-    <p>&copy; 2024 Your Company. All rights reserved. <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    <p>&copy;  2024 Efficiency Lab  | <span style="color: #666666">邮箱:</span><span style="color: #67BCBD">aetfopuca@gmail.com</span></p>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -539,8 +553,8 @@
         }
 
         function showScenario(scenarioClass) {
-            document.querySelectorAll('.contentScenarioInfo ul').forEach(function (ul) {
-                ul.style.display = 'none';
+            document.querySelectorAll('.contentScenarioInfo div').forEach(function (div) {
+                div.style.display = 'none';
             });
             document.querySelector('.' + scenarioClass).style.display = 'block';
         }
